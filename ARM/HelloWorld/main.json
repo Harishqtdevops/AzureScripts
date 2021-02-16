@@ -3,7 +3,7 @@
     "contentVersion": "0.0.0.1",
     "resources": [
       {
-        "name": "string",
+        "name": "armtemp3123",
         "type": "Microsoft.Storage/storageAccounts",
         "apiVersion": "2019-06-01",
         "sku": {
@@ -11,7 +11,7 @@
           "tier": "Standard"
       },
       "kind": "StorageV2",
-      "location": "West US",
+      "location": "East US",
       "properties": {
         "accessTier": "Hot"
       }
