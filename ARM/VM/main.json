@@ -1,0 +1,76 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_ARMVM_name": {
+            "defaultValue": "ARMVM1",
+            "type": "String"
+        },
+        "disks_ARMVM_disk1_4dbe9f722cb241e591ea4271a07f29df_externalid": {
+            "defaultValue": "/subscriptions/7d695e74-199c-4dd7-bdd3-0b215acd6adf/resourceGroups/ARM/providers/Microsoft.Compute/disks/ARMVM_disk1_4dbe9f722cb241e591ea4271a07f29df",
+            "type": "String"
+        },
+        "networkInterfaces_armvm183_externalid": {
+            "defaultValue": "/subscriptions/7d695e74-199c-4dd7-bdd3-0b215acd6adf/resourceGroups/ARM/providers/Microsoft.Network/networkInterfaces/armvm183",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2019-07-01",
+            "name": "[parameters('virtualMachines_ARMVM_name')]",
+            "location": "west europe",
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_D2_v3"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2016-Datacenter",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Windows",
+                        "name": "[concat(parameters('virtualMachines_ARMVM_name'), '_disk1_4dbe9f722cb241e591ea4271a07f29df')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS",
+                            "id": "[parameters('disks_ARMVM_disk1_4dbe9f722cb241e591ea4271a07f29df_externalid')]"
+                        },
+                        "diskSizeGB": 127
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_ARMVM_name')]",
+                    "adminUsername": "AzureUser",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[parameters('networkInterfaces_armvm183_externalid')]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "https://armstr2.blob.core.windows.net/"
+                    }
+                }
+            }
+        }
+    ]
+}
